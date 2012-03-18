@@ -1,0 +1,7 @@
+{
+    "name": "shed-hat",
+    "version": "0.1.0",
+    "dependencies": {
+        "shed-compiler": "git://github.com/mwilliamson/node-shed-compiler.git"
+    }
+}

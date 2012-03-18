@@ -1,0 +1,19 @@
+package hat;
+
+public val results = object {
+    public def TestResult class(errors: List[AssertionError]) {
+        public def getTestName() => testName;
+        public def isSuccess() => errors.isEmpty();
+    }
+    
+    public def success() : TestResult => TestResult([]);
+    
+    public def failure(description: String) : TestResult => {
+        val error = AssertionError(description);
+        return TestResult([error]);
+    }
+    
+    public def AssertionError class(description: String) {
+        public def getDescription() => description;
+    }
+};

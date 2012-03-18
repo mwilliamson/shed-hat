@@ -1,0 +1,16 @@
+package hat;
+
+public def runTestCases(testCases: List[TestCase]) : Unit => {
+    testCases.forEach(runTestCase);
+}
+
+def runTestCase(testCase: TestCase) => {
+    print(testCase.getDescription().concat("... "));
+    val results = testCase.run();
+    if results.isSuccess() {
+        print("success");
+    } else {
+        print("failed");
+    };
+    print("\n");
+};

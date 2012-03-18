@@ -1,0 +1,11 @@
+package hat.tests;
+
+import hat.TestCase;
+import hat.assertTrue;
+import hat.runTestCases;
+
+public def pass() => runTestCases([
+    TestCase("can assert that things are true", () =>
+        assertTrue(true)
+    )
+]);
