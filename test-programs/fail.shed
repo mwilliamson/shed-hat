@@ -4,8 +4,8 @@ import hat.TestCase;
 import hat.assertTrue;
 import hat.runTestCases;
 
-public def fail() => runTestCases([
+public val fail = [
     TestCase("can assert that things are true", () =>
         assertTrue(false)
     )
-]);
+];

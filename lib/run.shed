@@ -1,0 +1,8 @@
+package hat;
+
+import hat.runTestCases;
+
+public def run(argv: List[String]) => {
+    val testCases = runtimeImport(argv.head());
+    runTestCases(testCases);
+};
