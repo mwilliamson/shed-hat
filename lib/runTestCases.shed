@@ -4,13 +4,24 @@ public def runTestCases(testCases: List[TestCase]) : Unit => {
     testCases.forEach(runTestCase);
 }
 
+val greenCode = "\u001B[32m";
+val redCode = "\u001B[31m";
+val blackCode = "\u001B[39m";
+
 def runTestCase(testCase: TestCase) => {
-    print(testCase.getDescription().concat("... "));
-    val results = testCase.run();
-    if results.isSuccess() {
-        print("success");
+    val description = testCase.getDescription();
+    print(description.concat("..."));
+    val result = testCase.run();
+    print("\r");
+    if result.isSuccess() {
+        print(greenCode);
+        print("✔ ");
     } else {
-        print("failed");
+        print(redCode);
+        print("✖ ");
     };
+    print(description);
+    print(" ");
+    print(blackCode);
     print("\n");
 };
