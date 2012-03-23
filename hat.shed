@@ -1,0 +1,63 @@
+public val hat = object {
+    public def TestResult class(errors: List[AssertionError]) {
+        public def getTestName() => testName;
+        public def isSuccess() => errors.isEmpty();
+    }
+        
+    public def AssertionError class(description: String) {
+        public def getDescription() => description;
+    }
+        
+    public val results = object {
+        public def success() : TestResult => TestResult([]);
+        
+        public def failure(description: String) : TestResult => {
+            val error = AssertionError(description);
+            return TestResult([error]);
+        }
+    };
+    
+    public def TestCase class(description: String, func: () -> TestResult) {
+        public def getDescription() : String => description;
+        public def run() : TestResult => func();
+    }
+    
+    public def assertTrue(value: Boolean) => {
+        return if value {
+            return results.success();
+        } else {
+            return results.failure("Expected true, got false");
+        };
+    }
+    
+    public def runTestCases(testCases: List[TestCase]) : Unit => {
+        testCases.forEach(runTestCase);
+    }
+
+    val greenCode = "\u001B[32m";
+    val redCode = "\u001B[31m";
+    val blackCode = "\u001B[39m";
+
+    def runTestCase(testCase: TestCase) => {
+        val description = testCase.getDescription();
+        print(description.concat("..."));
+        val result = testCase.run();
+        print("\r");
+        if result.isSuccess() {
+            print(greenCode);
+            print("✔ ");
+        } else {
+            print(redCode);
+            print("✖ ");
+        };
+        print(description);
+        print(" ");
+        print(blackCode);
+        print("\n");
+    };
+    
+    public def run(argv: List[String]) => {
+        val testCases = runtimeImport(argv.head());
+        runTestCases(testCases);
+    };
+};

@@ -1,11 +1,9 @@
 package hat.tests;
 
-import hat.TestCase;
-import hat.assertTrue;
-import hat.runTestCases;
+import hat;
 
 public val pass = [
-    TestCase("can assert that things are true", () =>
-        assertTrue(true)
+    hat.TestCase("can assert that things are true", () =>
+        hat.assertTrue(true)
     )
 ];
