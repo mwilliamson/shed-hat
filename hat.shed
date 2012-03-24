@@ -1,10 +1,10 @@
 public val hat = object {
-    public def TestResult class(errors: List[AssertionError]) {
+    public def TestResult class(errors: List[AssertionError]) => {
         public def getTestName fun() => testName;
         public def isSuccess fun() => errors.isEmpty();
     }
         
-    public def AssertionError class(description: String) {
+    public def AssertionError class(description: String) => {
         public def getDescription fun() => description;
     }
         
@@ -17,7 +17,7 @@ public val hat = object {
         }
     };
     
-    public def TestCase class(description: String, func: () -> TestResult) {
+    public def TestCase class(description: String, func: () -> TestResult) => {
         public def getDescription fun() : String => description;
         public def run fun() : TestResult => func();
     }
