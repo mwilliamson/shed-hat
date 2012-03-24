@@ -2,8 +2,8 @@ package hat.tests;
 
 import hat;
 
-public val pass = [
-    hat.TestCase("can assert that things are true", () =>
+public val pass = listOf(
+    hat.TestCase("can assert that things are true", fun() =>
         hat.assertTrue(true)
     )
-];
+);

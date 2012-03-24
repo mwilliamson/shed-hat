@@ -1,28 +1,28 @@
 public val hat = object {
     public def TestResult class(errors: List[AssertionError]) {
-        public def getTestName() => testName;
-        public def isSuccess() => errors.isEmpty();
+        public def getTestName fun() => testName;
+        public def isSuccess fun() => errors.isEmpty();
     }
         
     public def AssertionError class(description: String) {
-        public def getDescription() => description;
+        public def getDescription fun() => description;
     }
         
     public val results = object {
-        public def success() : TestResult => TestResult([]);
+        public def success fun() : TestResult => TestResult(listOf());
         
-        public def failure(description: String) : TestResult => {
+        public def failure fun(description: String) : TestResult => {
             val error = AssertionError(description);
-            return TestResult([error]);
+            return TestResult(listOf(error));
         }
     };
     
     public def TestCase class(description: String, func: () -> TestResult) {
-        public def getDescription() : String => description;
-        public def run() : TestResult => func();
+        public def getDescription fun() : String => description;
+        public def run fun() : TestResult => func();
     }
     
-    public def assertTrue(value: Boolean) => {
+    public def assertTrue fun(value: Boolean) => {
         return if value {
             return results.success();
         } else {
@@ -30,7 +30,7 @@ public val hat = object {
         };
     }
     
-    public def runTestCases(testCases: List[TestCase]) : Unit => {
+    public def runTestCases fun(testCases: List[TestCase]) : Unit => {
         testCases.forEach(runTestCase);
     }
 
@@ -38,7 +38,7 @@ public val hat = object {
     val redCode = "\u001B[31m";
     val blackCode = "\u001B[39m";
 
-    def runTestCase(testCase: TestCase) => {
+    def runTestCase fun(testCase: TestCase) => {
         val description = testCase.getDescription();
         print(description.concat("..."));
         val result = testCase.run();
@@ -56,7 +56,7 @@ public val hat = object {
         print("\n");
     };
     
-    public def run(argv: List[String]) => {
+    public def run fun(argv: List[String]) => {
         val testCases = runtimeImport(argv.head());
         runTestCases(testCases);
     };

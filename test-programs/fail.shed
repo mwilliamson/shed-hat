@@ -2,10 +2,9 @@ package hat.tests;
 
 import hat.TestCase;
 import hat.assertTrue;
-import hat.runTestCases;
 
-public val fail = [
-    TestCase("can assert that things are true", () =>
+public val fail = listOf(
+    TestCase("can assert that things are true", fun() =>
         assertTrue(false)
     )
-];
+);
