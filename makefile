@@ -1,4 +1,5 @@
 build-tests:
+	mkdir -p _build
 	node_modules/.bin/shed-compile hat.shed test-programs --main=hat.run > _build/tests.js
 
 pass: build-tests
