@@ -8,3 +8,5 @@ pass: build-tests
 fail: build-tests
 	node _build/tests.js hat.tests.fail
 
+mix: build-tests
+	node _build/tests.js hat.tests.mix

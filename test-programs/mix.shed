@@ -1,0 +1,12 @@
+package hat.tests;
+
+import hat;
+
+public val mix = listOf(
+    hat.TestCase("can assert that things are true", fun() =>
+        hat.assertTrue(true)
+    ),
+    hat.TestCase("can assert that things are true", fun() =>
+        hat.assertTrue(false)
+    )
+);
