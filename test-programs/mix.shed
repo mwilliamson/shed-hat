@@ -3,10 +3,16 @@ package hat.tests;
 import hat;
 
 public val mix = listOf(
-    hat.TestCase("can assert that things are true", fun() =>
+    hat.TestCase("Should pass", fun() =>
         hat.assertTrue(true)
     ),
-    hat.TestCase("can assert that things are true", fun() =>
+    hat.TestCase("Should fail", fun() =>
         hat.assertTrue(false)
+    ),
+    hat.TestCase("Should also fail", fun() =>
+        hat.assertTrue(false)
+    ),
+    hat.TestCase("Should also pass", fun() =>
+        hat.assertTrue(true)
     )
 );
