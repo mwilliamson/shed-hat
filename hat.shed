@@ -1,6 +1,7 @@
 public val hat = object {
     public def TestResult class(errors: List[AssertionError]) => {
         public def isSuccess fun() => errors.isEmpty();
+        public def getErrors fun() => errors;
     }
         
     public def AssertionError class(description: String) => {
@@ -77,6 +78,10 @@ public val hat = object {
         print(" ");
         print(blackCode);
         print("\n");
+        result.getErrors().forEach(fun (error: AssertionError) => {
+            print(error.getDescription());
+            print("\n\n");
+        });
         return result;
     };
     
