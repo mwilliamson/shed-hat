@@ -1,18 +1,19 @@
 package hat.tests;
 
-import hat;
+import hat.TestCase;
+import hat.assertTrue;
 
-public val mix = listOf(
-    hat.TestCase("Should pass", fun() =>
-        hat.assertTrue(true)
+public val mix = listOf[TestCase](
+    TestCase("Should pass", fun() =>
+        assertTrue(true)
     ),
-    hat.TestCase("Should fail", fun() =>
-        hat.assertTrue(false)
+    TestCase("Should fail", fun() =>
+        assertTrue(false)
     ),
-    hat.TestCase("Should also fail", fun() =>
-        hat.assertTrue(false)
+    TestCase("Should also fail", fun() =>
+        assertTrue(false)
     ),
-    hat.TestCase("Should also pass", fun() =>
-        hat.assertTrue(true)
+    TestCase("Should also pass", fun() =>
+        assertTrue(true)
     )
 );

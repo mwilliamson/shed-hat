@@ -9,11 +9,11 @@ public val hat = object {
     }
         
     public val results = object {
-        public def success fun() : TestResult => TestResult(listOf());
+        public def success fun() : TestResult => TestResult(emptyList);
         
         public def failure fun(description: String) : TestResult => {
             val error = AssertionError(description);
-            return TestResult(listOf(error));
+            return TestResult(listOf[AssertionError](error));
         }
         
         public def all fun(results: List[TestResult]) => {
@@ -21,7 +21,7 @@ public val hat = object {
             val concat = fun[T] => (first: List[T], second: List[T]) => first.concat(second);
             val errors = results
                 .map(getErrors)
-                .foldLeft(listOf(), concat[AssertionError]);
+                .foldLeft(emptyList, concat[AssertionError]);
             return TestResult(errors);
         }
     };
@@ -80,7 +80,7 @@ public val hat = object {
     
     public def runTestCases fun(testCases: List[TestCase]) : Unit => {
         val results = testCases.map(runTestCase);
-        return results.foldLeft(TestResults(listOf()), combineResults);
+        return results.foldLeft(TestResults(emptyList), combineResults);
     }
     
     def combineResults fun(results: TestResults, result: TestResult) => {
