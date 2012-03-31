@@ -31,24 +31,20 @@ public val hat = object {
         public def run fun() : TestResult => func();
     }
     
-    public def assertTrue fun(value: Boolean) => {
-        return if value {
-            return results.success();
-        } else {
-            return results.failure("Expected true, got false");
-        };
-    }
+    public def assertTrue fun(value: Boolean) =>
+        if value then
+            results.success()
+        else
+            results.failure("Expected true, got false");
     
-    public def assertFalse fun(value: Boolean) => {
-        return if not(value) {
-            return results.success();
-        } else {
-            return results.failure("Expected false, got true");
-        };
-    }
+    public def assertFalse fun(value: Boolean) =>
+        if not(value) then
+            results.success()
+        else
+            results.failure("Expected false, got true");
     
     public def assertEquals fun[T] => (expected: T, actual: T) => {
-        return if expected.equals(actual) {
+        return if expected.equals(actual) then {
             return results.success();
         } else {
             val message = "Expected "
@@ -96,7 +92,7 @@ public val hat = object {
         print(description.concat("..."));
         val result = testCase.run();
         print("\r");
-        if result.isSuccess() {
+        if result.isSuccess() then {
             print(greenCode);
             print("✔ ");
         } else {
@@ -117,11 +113,10 @@ public val hat = object {
     public def run fun(argv: List[String]) => {
         val testCases = runtimeImport(argv.head());
         val results = runTestCases(testCases);
-        if (results.isSuccess()) {
-            printSuccess(results);
-        } else {
+        if results.isSuccess() then
+            printSuccess(results)
+        else
             printFailure(results);
-        };
     }
     
     def printSuccess fun(results: TestResults) : Unit => {
