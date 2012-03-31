@@ -128,7 +128,7 @@ public val hat = object {
         print(greenCode);
         print("✔ ");
         print(results.numberOfTests().toString());
-        print(" test passed\n");
+        print(" test(s) passed\n");
         print(blackCode);
     }
     
