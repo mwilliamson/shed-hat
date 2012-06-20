@@ -48,9 +48,9 @@ public val hat = object {
             return results.success();
         } else do {
             val message = "Expected "
-                .concat(representation(expected))
+                .concat(represent(expected))
                 .concat(", got ")
-                .concat(representation(actual));
+                .concat(represent(actual));
             return results.failure(message);
         };
     
