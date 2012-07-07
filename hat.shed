@@ -1,3 +1,5 @@
+import promises;
+
 public val hat = object {
     public def TestResult class(errors: List[AssertionError]) => {
         public def isSuccess fun() => errors.isEmpty();
@@ -69,8 +71,11 @@ public val hat = object {
     }
     
     public def runTestCases fun(testCases: List[TestCase]) : Unit => do {
-        val results = testCases.map(runTestCase);
-        return results.foldLeft(TestResults(emptyList), combineResults);
+        // TODO: serialise test cases
+        val resultsPromise = promises.combineList(testCases.map(runTestCase));
+        return resultsPromise.map(fun(results: List[TestResult]) =>
+            results.foldLeft(TestResults(emptyList), combineResults)
+        );
     }
     
     def combineResults fun(results: TestResults, result: TestResult) =>
@@ -82,34 +87,42 @@ public val hat = object {
 
     def runTestCase fun(testCase: TestCase) : TestResult => do {
         val description = testCase.getDescription();
-        print(description.concat("..."));
+        //print(description.concat("..."));
         val result = testCase.run();
-        print("\r");
-        if result.isSuccess() then do {
-            print(greenCode);
-            print("✔ ");
-        } else do {
-            print(redCode);
-            print("✖ ");
-        };
-        print(description);
-        print(" ");
-        print(blackCode);
-        print("\n");
-        result.getErrors().forEach(fun (error: AssertionError) => do {
-            print(error.getDescription());
-            print("\n\n");
+        val resultPromise = if promises.isPromise(result) then
+            result
+        else
+            promises.createFulfilledPromise(result);
+        return resultPromise.map(fun(result: TestResult) => do {
+            //print("\r");
+            if result.isSuccess() then do {
+                print(greenCode);
+                print("✔ ");
+            } else do {
+                print(redCode);
+                print("✖ ");
+            };
+            print(description);
+            print(" ");
+            print(blackCode);
+            print("\n");
+            result.getErrors().forEach(fun (error: AssertionError) => do {
+                print(error.getDescription());
+                print("\n\n");
+            });
+            return result;
         });
-        return result;
     };
     
     public def run fun(argv: List[String]) => do {
         val testCases = runtimeImport(argv.head());
-        val results = runTestCases(testCases);
-        if results.isSuccess() then
-            printSuccess(results)
-        else
-            printFailure(results);
+        val resultsPromise = runTestCases(testCases);
+        resultsPromise.map(fun(results: TestResults) => do {
+            if results.isSuccess() then
+                printSuccess(results)
+            else
+                printFailure(results);
+        });
     }
     
     def printSuccess fun(results: TestResults) : Unit => do {

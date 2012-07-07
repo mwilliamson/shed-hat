@@ -1,0 +1,12 @@
+package hat.tests;
+
+import time;
+
+import hat.TestCase;
+import hat.assertTrue;
+
+public val async = listOf[TestCase](
+    TestCase("can wait for results", fun() =>
+        time.sleep(1).map(fun() => assertTrue(true))
+    )
+);

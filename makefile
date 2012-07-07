@@ -10,3 +10,6 @@ fail: build-tests
 
 mix: build-tests
 	node _build/tests.js hat.tests.mix
+
+async: build-tests
+	node _build/tests.js hat.tests.async
