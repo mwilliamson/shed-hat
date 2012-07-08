@@ -1,9 +1,13 @@
-package hat.tests;
+module hat.tests.mix;
+
+members {
+    testCases
+}
 
 import hat.TestCase;
 import hat.assertTrue;
 
-public val mix = listOf[TestCase](
+val testCases = listOf[TestCase](
     TestCase("Should pass", fun() =>
         assertTrue(true)
     ),
