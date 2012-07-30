@@ -127,16 +127,19 @@ def runTestCase fun(testCase: TestCase) : TestResult => do {
     });
 };
 
-def run fun(argv: List[String]) => do {
-    val testCases = runtimeImport(argv.head());
-    val resultsPromise = runTestCases(testCases);
-    resultsPromise.map(fun(results: TestResults) => do {
-        if results.isSuccess() then
-            printSuccess(results)
-        else
-            printFailure(results);
-    });
-}
+def run fun(argv: List[String]) =>
+    argv.forEach(fun(testModuleName: String) => do {
+        print("Running tests: ".concat(testModuleName).concat("\n"));
+        val testCases = runtimeImport(testModuleName);
+        val resultsPromise = runTestCases(testCases);
+        resultsPromise.map(fun(results: TestResults) => do {
+            if results.isSuccess() then
+                printSuccess(results)
+            else
+                printFailure(results);
+            print("\n");
+        });
+    })
 
 def printSuccess fun(results: TestResults) : Unit => do {
     print(greenCode);
