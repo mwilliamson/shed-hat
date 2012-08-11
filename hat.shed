@@ -15,23 +15,37 @@ members {
 import promises;
 
 def TestResult class(errors: List[AssertionError]) => {
-    public def isSuccess fun() => errors.isEmpty();
-    public def getErrors fun() => errors;
+    members {
+        isSuccess,
+        getErrors
+    }
+    
+    def isSuccess fun() => errors.isEmpty();
+    def getErrors fun() => errors;
 }
     
 def AssertionError class(description: String) => {
-    public def getDescription fun() => description;
+    members {
+        getDescription
+    }
+    def getDescription fun() => description;
 }
     
 val results = object {
-    public def success fun() : TestResult => TestResult(emptyList);
+    members {
+        success,
+        failure,
+        all
+    }
     
-    public def failure fun(description: String) : TestResult => do {
+    def success fun() : TestResult => TestResult(emptyList);
+    
+    def failure fun(description: String) : TestResult => do {
         val error = AssertionError(description);
         return TestResult(listOf[AssertionError](error));
     }
     
-    public def all fun(results: List[TestResult]) => do {
+    def all fun(results: List[TestResult]) => do {
         val getErrors = fun(result: TestResult) => result.getErrors();
         val concat = fun[T] => (first: List[T], second: List[T]) => first.concat(second);
         val errors = results
@@ -41,9 +55,14 @@ val results = object {
     }
 };
 
-def TestCase class(description: String, func: () -> TestResult) => {
-    public def getDescription fun() : String => description;
-    public def run fun() : TestResult => func();
+def TestCase class(description: String, func: Function[TestResult]) => {
+    members {
+        getDescription,
+        run
+    }
+    
+    def getDescription fun() : String => description;
+    def run fun() : TestResult => func();
 }
 
 def assertTrue fun(value: Boolean) =>
@@ -70,16 +89,23 @@ def assertEquals fun[T] => (expected: T, actual: T) =>
     };
 
 def TestResults class(results: List[TestResult]) => {
-    public def add fun(result: TestResult) =>
+    members {
+        add,
+        isSuccess,
+        numberOfTests,
+        failures
+    }
+    
+    def add fun(result: TestResult) =>
         TestResults(results.append(result));
     
-    public def isSuccess fun() : Boolean =>
+    def isSuccess fun() : Boolean =>
         failures().isEmpty();
     
-    public def numberOfTests fun() : Double =>
+    def numberOfTests fun() : Double =>
         results.length();
     
-    public def failures fun() : List[TestResult] =>
+    def failures fun() : List[TestResult] =>
         results.filter(fun (result: TestResult) => not(result.isSuccess()));
 }
 
