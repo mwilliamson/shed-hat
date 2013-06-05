@@ -1,4 +1,4 @@
-module hat.tests.async;
+module hat/tests/async;
 
 members {
     testCases

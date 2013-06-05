@@ -1,4 +1,4 @@
-module hat.tests.mix;
+module hat/tests/mix;
 
 members {
     testCases

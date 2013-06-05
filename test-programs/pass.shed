@@ -1,4 +1,4 @@
-module hat.tests.pass;
+module hat/tests/pass;
 
 members {
     testCases
