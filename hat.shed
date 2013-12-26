@@ -1,6 +1,6 @@
 module hat;
 
-members {
+members::
     TestResult,
     AssertionError,
     results,
@@ -10,60 +10,49 @@ members {
     assertEquals,
     runTestCases,
     run
-}
 
 import promises;
 
-def TestResult class(errors: List[AssertionError]) => {
-    members {
+def TestResult class(errors: List[AssertionError]) => ::
+    members::
         isSuccess,
         getErrors
-    }
     
     def isSuccess fun() => errors.isEmpty();
     def getErrors fun() => errors;
-}
     
-def AssertionError class(description: String) => {
-    members {
+def AssertionError class(description: String) => ::
+    members::
         getDescription
-    }
     def getDescription fun() => description;
-}
     
-val results = object {
-    members {
+val results = object::
+    members::
         success,
         failure,
         all
-    }
     
     def success fun() : TestResult => TestResult(emptyList);
     
-    def failure fun(description: String) : TestResult => do {
+    def failure fun(description: String) : TestResult => do::
         val error = AssertionError(description);
         return TestResult(listOf[AssertionError](error));
-    }
     
-    def all fun(results: List[TestResult]) => do {
+    def all fun(results: List[TestResult]) => do::
         val getErrors = fun(result: TestResult) => result.getErrors();
         val concat = fun[T] => (first: List[T], second: List[T]) => first.concat(second);
         val errors = results
             .map(getErrors)
             .foldLeft(emptyList, concat[AssertionError]);
         return TestResult(errors);
-    }
-};
 
-def TestCase class(description: String, func: Function[TestResult]) => {
-    members {
+def TestCase class(description: String, func: Function[TestResult]) => ::
+    members::
         getDescription,
         run
-    }
     
     def getDescription fun() : String => description;
     def run fun() : TestResult => func();
-}
 
 def assertTrue fun(value: Boolean) =>
     if value then
@@ -78,23 +67,21 @@ def assertFalse fun(value: Boolean) =>
         results.failure("Expected false, got true");
 
 def assertEquals fun[T] => (expected: T, actual: T) =>
-    if expected.equals(actual) then do {
-        return results.success();
-    } else do {
+    if expected.equals(actual) then
+        results.success()
+    else do::
         val message = "Expected "
             .concat(represent(expected))
             .concat(", got ")
             .concat(represent(actual));
         return results.failure(message);
-    };
 
-def TestResults class(results: List[TestResult]) => {
-    members {
+def TestResults class(results: List[TestResult]) => ::
+    members::
         add,
         isSuccess,
         numberOfTests,
         failures
-    }
     
     def add fun(result: TestResult) =>
         TestResults(results.append(result));
@@ -107,15 +94,13 @@ def TestResults class(results: List[TestResult]) => {
     
     def failures fun() : List[TestResult] =>
         results.filter(fun (result: TestResult) => not(result.isSuccess()));
-}
 
-def runTestCases fun(testCases: List[TestCase]) : Unit => do {
-    // TODO: serialise test cases
+def runTestCases fun(testCases: List[TestCase]) : Unit => do::
+    // TODO: serialise test cases   
     val resultsPromise = promises.combineList(testCases.map(runTestCase));
     return resultsPromise.map(fun(results: List[TestResult]) =>
         results.foldLeft(TestResults(emptyList), combineResults)
     );
-}
 
 def combineResults fun(results: TestResults, result: TestResult) =>
     results.add(result);
@@ -124,7 +109,7 @@ val greenCode = "\u001B[32m";
 val redCode = "\u001B[31m";
 val blackCode = "\u001B[39m";
 
-def runTestCase fun(testCase: TestCase) : TestResult => do {
+def runTestCase fun(testCase: TestCase) : TestResult => do::
     val description = testCase.getDescription();
     //print(description.concat("..."));
     val result = testCase.run();
@@ -132,72 +117,66 @@ def runTestCase fun(testCase: TestCase) : TestResult => do {
         result
     else
         promises.createFulfilledPromise(result);
-    return resultPromise.map(fun(result: TestResult) => do {
+    return resultPromise.map(fun(result: TestResult) => do::
         //print("\r");
-        if result.isSuccess() then do {
+        if result.isSuccess() then do::
             print(greenCode);
             print("✔ ");
-        } else do {
+        else do::
             print(redCode);
             print("✖ ");
-        };
         print(description);
         print(" ");
         print(blackCode);
         print("\n");
-        result.getErrors().forEach(fun (error: AssertionError) => do {
+        result.getErrors().forEach(fun (error: AssertionError) => do::
             print(error.getDescription());
             print("\n\n");
-        });
+        );
         return result;
-    });
-};
+    );
 
-def run fun(argv: List[String]) => do {
-    val resultsPromises = argv.map(fun(testModuleName: String) => do {
+def run fun(argv: List[String]) => do::
+    val resultsPromises = argv.map(fun(testModuleName: String) => do::
         print("Running tests: ".concat(testModuleName).concat("\n"));
         val testCases = runtimeImport(testModuleName);
         val resultsPromise = runTestCases(testCases);
-        resultsPromise.map(fun(results: TestResults) => do {
+        resultsPromise.map(fun(results: TestResults) => do::
             if results.isSuccess() then
                 printSuccess(results)
             else
                 printFailure(results);
             print("\n");
-        });
+        );
         return resultsPromise;
-    });
+    );
     
-    promises.combineList(resultsPromises).map(fun(results: List[TestResult]) => do {
+    promises.combineList(resultsPromises).map(fun(results: List[TestResult]) => do::
         val isSuccess = results
             .map(fun(result: TestResult) => result.isSuccess())
             .foldLeft(true, and);
         
-        if isSuccess then do {
+        if isSuccess then do::
             print(greenCode);
             print("Pass!\n");
             print(blackCode);
-        } else do {
+        else do::
             print(redCode);
             print("Fail\n");
             print(blackCode);
-        };
-    });
-}
+    );
 
-def printSuccess fun(results: TestResults) : Unit => do {
+def printSuccess fun(results: TestResults) : Unit => do::
     print(greenCode);
     print("✔ ");
     print(results.numberOfTests().toString());
     print(" test(s) passed\n");
     print(blackCode);
-}
 
-def printFailure fun(results: TestResults) : Unit => do {
+def printFailure fun(results: TestResults) : Unit => do::
     val failures = results.failures();
     print(redCode);
     print("✖ ");
     print(failures.length().toString());
     print(" test failures\n");
     print(blackCode);
-}
